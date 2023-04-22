@@ -11,35 +11,42 @@ router.get('/', (req, res) => {
   res.write('<h1>Hello from Express MJ.js!</h1>');
   res.end();
 });
+
+//weather function
+const weatherCall = async (req, res, next) => {
+  try {
+    const searchParams = req.query
+    const apiKey = "6b5b8caf65d880fae5fefb98288bdce5"
+    
+    const url = "https://api.openweathermap.org/data/2.5/weather?q=alappuzha&appid=5b61522c47c162cbedbecc5b128a1ccf"
+    const response = await axios.get(url)
+    
+    // const forecastData = await forecastWeather({lat:response.data.coord.lat,lon:response.data.coord.lon,exclude:"minutely",units:"metric"});
+    // const weatherData = await formatWeatherData(response.data, forecastData.data.timezone)
+    // const weatherForecast = await formatForecastData(forecastData.data)
+    // const date = formatToLocalTime(forecastData.data.current.dt, forecastData.data.timezone)
+    
+    
+    res.status(200).json({ response: response.data })
+  } catch (err) {
+    next(err)
+  }
+}
+
+router.get("/weather",(req,res)=>{
+   weatherCall(req,res).then((data)=>{
+    res.status(200).json({data})
+  }).catch((err)=>{
+    res.status(400).json({err})
+  }
+  )
+} )
 router.get('/another', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/html' });
   res.write('<h1>Hello from another route!</h1>');
   console.log('Hello from another route!');
   res.end();
 });
-
-//weather function
-const weatherCall = async (req, res, next) => {
-  try {
-      const searchParams = req.query
-      const apiKey = "6b5b8caf65d880fae5fefb98288bdce5"
-
-      const url = "https://api.openweathermap.org/data/2.5/weather?q=alappuzha&appid=5b61522c47c162cbedbecc5b128a1ccf"
-      const response = await axios.get(url)
-
-      // const forecastData = await forecastWeather({lat:response.data.coord.lat,lon:response.data.coord.lon,exclude:"minutely",units:"metric"});
-      // const weatherData = await formatWeatherData(response.data, forecastData.data.timezone)
-      // const weatherForecast = await formatForecastData(forecastData.data)
-      // const date = formatToLocalTime(forecastData.data.current.dt, forecastData.data.timezone)
-     
-
-      res.status(200).json({ response: response.data })
-  } catch (err) {
-      next(err)
-  }
-}
-
-router.get("/weather", weatherCall)
 router.post('/', (req, res) => res.json({ postBody: req.body }));
 
 app.use((err,req,res,next)=>{
