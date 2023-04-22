@@ -33,14 +33,12 @@ const weatherCall = async (req, res, next) => {
   }
 }
 
-router.get("/weather",(req,res)=>{
-   weatherCall(req,res).then((data)=>{
-    res.status(200).json({data})
-  }).catch((err)=>{
-    res.status(400).json({err})
-  }
-  )
-} )
+router.get("/weather", async (req,res)=>{
+  const url = "https://api.openweathermap.org/data/2.5/weather?q=alappuzha&appid=5b61522c47c162cbedbecc5b128a1ccf"
+  const response = await axios.get(url)
+  res.status(200).json({ response: response.data })
+  } )
+
 router.get('/another', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/html' });
   res.write('<h1>Hello from another route!</h1>');
