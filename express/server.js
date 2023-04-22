@@ -17,6 +17,8 @@ router.get('/another', (req, res) => {
   console.log('Hello from another route!');
   res.end();
 });
+
+//weather function
 const weatherCall = async (req, res, next) => {
   try {
       const searchParams = req.query
@@ -31,12 +33,13 @@ const weatherCall = async (req, res, next) => {
       // const date = formatToLocalTime(forecastData.data.current.dt, forecastData.data.timezone)
      
 
-      res.status(200).json({ date, weatherData, weatherForecast })
+      res.status(200).json({ response: response.data })
   } catch (err) {
       next(err)
   }
-router.get("/weather", weatherCall)
 }
+
+router.get("/weather", weatherCall)
 router.post('/', (req, res) => res.json({ postBody: req.body }));
 
 app.use((err,req,res,next)=>{
